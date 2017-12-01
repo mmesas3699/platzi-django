@@ -1,0 +1,73 @@
+# Guia de python
+	Es un lenguaje interpretado o de script 
+
+	- Ventajas: 
+		Legible: sintaxis intuitiva o estricta.
+		Productivo: ahorra mucho código.
+		Portable: para todo sistema operativo.
+		Recargado: viene con muchas librerias por defecto.
+
+	- Conversiones:
+		* De flotante a entero:
+			>>> int(4.3)
+				4
+
+		* De entero a flotante:
+			>>> float(4)
+				4.0
+
+		* De entero a string:
+			>>> str(4.3)
+				"4.3"
+
+		* De tupla a lista:
+			>>> list((4, 5, 2))
+				[4, 5, 2]
+
+	- Operadores comunes:
+		* Longitud de una cadena, lista, tupla, string, etc..
+			>>> len('key')
+				3
+
+		* Tipo de dato:
+			>>> type(4)
+				< type int >
+
+		* Aplicar una conversión a un conjunto como una lista:
+			>>> map(str, [1, 2, 3, 4])
+				['1', '2', '3', '4']
+
+		* Redondear un flotante con X número de decimales:
+			>>> round(6.3243, 1)
+				6.3
+
+		* Generar un rango de listas (esto es mágico):
+			>>> range(5)
+				[0, 1, 2, 3, 4, 5]
+
+		* Sumar un conjunto:
+			>>> sum([1, 2, 4])
+				7
+
+		* Organizar un conjunto:
+			>>> sorted([5, 2, 1])
+				[1, 2, 5]
+
+		* Decir que le puedes aplicar a X tipo de datos:
+			>>> dir([5, 2])
+				(Aparecerán todas las funciones que tiene una lista)
+
+		* Información sobre una función o libreria
+			>>> help(sorted)
+				(Aparecerá la documentación de la función sorted)
+
+	- Metodos especiales:
+		* cmp(self, otro)
+			Metodo llamado cuando utilizas los operadores de comparación para comprobar si tu objeto es 
+			menor, mayo o igual al objeto pasado como parametro.
+
+		* len()
+
+		* init()
+
+		
