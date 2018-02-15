@@ -1,73 +1,254 @@
-# Guia de python
-	Es un lenguaje interpretado o de script 
+							#################################
+							# 	NOTAS DEL PROYECTO GREXCO	#		
+							#################################
 
-	- Ventajas: 
-		Legible: sintaxis intuitiva o estricta.
-		Productivo: ahorra mucho código.
-		Portable: para todo sistema operativo.
-		Recargado: viene con muchas librerias por defecto.
+Conectar Mysql y Django: https://www.digitalocean.com/community/tutorials/how-to-create-a-django-app-and-connect-it-to-a-database
 
-	- Conversiones:
-		* De flotante a entero:
-			>>> int(4.3)
-				4
+Conceder acceso a usuarios a Mysql: https://chartio.com/resources/tutorials/how-to-grant-all-privileges-on-a-database-in-mysql/
 
-		* De entero a flotante:
-			>>> float(4)
-				4.0
+Crear Data base: CREATE DATABASE `my-db` CHARACTER SET utf8 COLLATE utf8_general_ci;	
+Check Mysql services:
+	$ sudo service mysql status
+	$ sudo service mysql stop
+	$ sudo service mysql start
 
-		* De entero a string:
-			>>> str(4.3)
-				"4.3"
 
-		* De tupla a lista:
-			>>> list((4, 5, 2))
-				[4, 5, 2]
+******* Comandos Django **********
+# Iniciar un proyecto 
+$ django-admin.py startproject mysite
 
-	- Operadores comunes:
-		* Longitud de una cadena, lista, tupla, string, etc..
-			>>> len('key')
-				3
+# Iniciar el servidor de Djando 
+$ python manage.py runserver
 
-		* Tipo de dato:
-			>>> type(4)
-				< type int >
+# Para iniciar el servidor en el puerto 8080
+$ python manage.py runserver 8080
 
-		* Aplicar una conversión a un conjunto como una lista:
-			>>> map(str, [1, 2, 3, 4])
-				['1', '2', '3', '4']
+# Para que este disponible para cualquier equipo de la red
+$ python manage.py runserver 0.0.0.0:8000
 
-		* Redondear un flotante con X número de decimales:
-			>>> round(6.3243, 1)
-				6.3
+# Para instalar mysqlclient
+$ sudo apt-get install python3-dev libmysqlclient-dev
+$ pip install mysqlclient
 
-		* Generar un rango de listas (esto es mágico):
-			>>> range(5)
-				[0, 1, 2, 3, 4, 5]
+# Para crear una app 
+$ python manage.py startapp aplicacion
 
-		* Sumar un conjunto:
-			>>> sum([1, 2, 4])
-				7
 
-		* Organizar un conjunto:
-			>>> sorted([5, 2, 1])
-				[1, 2, 5]
+******* Carpetas Django *********
+- mysite/: Directorio que contiene el projecto. Se puede cambiar el nombre en cualquier momento sin afectar el proyecto.
+- mysite/mysite/: Directorio del paquete que contiene el projecto. Es un paquete python y se usará para importar cualquier cosa dentro
+                  de el.
+- mysite/__init__.py: Un archivo requerido para que Python trate a este directorio como un paquete.
+- mysite/settings.py: Opciones/configuraciones para este proyecto de Django.
+- mysite/urls.py: La declaración de las URL para este proyecto de Django; una "tabla de contenidos".
+- mysite/wsgi.py: El archivo encargado de ser compatible con el servidor web.
 
-		* Decir que le puedes aplicar a X tipo de datos:
-			>>> dir([5, 2])
-				(Aparecerán todas las funciones que tiene una lista)
 
-		* Información sobre una función o libreria
-			>>> help(sorted)
-				(Aparecerá la documentación de la función sorted)
+****** Registrar una aplicación ******
+- En /my-site/my-site/settings.py :
+	
+	INSTALLED_APPS = [
+		'django.contrib.admin',
+	    'django.contrib.auth',
+	    'django.contrib.contenttypes',
+	    'django.contrib.sessions',
+	    'django.contrib.messages',
+	    'django.contrib.staticfiles',
+	>>  'miApp.apps.miAppConfig', 
+	]
 
-	- Metodos especiales:
-		* cmp(self, otro)
-			Metodo llamado cuando utilizas los operadores de comparación para comprobar si tu objeto es 
-			menor, mayo o igual al objeto pasado como parametro.
+>> Especifica el objeto de configuracion de 'mi aplicación (miApp)'. Este se generó en /my-site/miApp/apps.py
 
-		* len()
 
-		* init()
+******** Migraciones *******
+$ python manage.py makemigrations
+$ python manage.py migrate
 
-		
+
+******** Shell para verificar los modelos ********
+$ python manage.py shell
+
+
+******** Enviar correos *********
+from django.core.mail import send_mail
+send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
+
+- En settings.py:
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'miguel.mesa@grexco.com.co'
+EMAIL_HOST_PASSWORD = 'grexco02'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+
+******** Sitio administrador **********
+1. Se debe registrar los modelos de cada aplicación en el archivo admin.py correspondiente:
+
+from .models import Author, Genre, Book, BookInstance
+
+admin.site.register(Book)
+admin.site.register(Author)
+admin.site.register(Genre)
+admin.site.register(BookInstance) 
+
+
+******** Crear un super usuario ********
+$ python manage.py createsuperuser
+
+(grexco, grexco02)
+
+
+******** Para que la aplicacion guarde la hora de la ciudad actual en la BD ********
+
+	# Internationalization
+	# https://docs.djangoproject.com/en/2.0/topics/i18n/
+
+		LANGUAGE_CODE = 'en-us'
+
+		TIME_ZONE = 'America/Bogota'
+
+		USE_I18N = True
+
+		USE_L10N = True
+
+		USE_TZ = False
+
+
+							#################################
+							# FIN NOTAS DEL PROYECTO GREXCO	#		
+							#################################
+
+
+¿ QUE ES DJANGO ?
+	Es un framework para aplicaciones web gratuito y open source, escrito en Python.
+
+	- ¿ Por qué usar Django?:
+		* Desarrollo ágil
+		* Miles de herramientas
+		* Seguro
+		* Personalizable
+		* Escalable
+		* Flexible: No ata a una sola forma de hacer las cosas.
+
+
+CREACION DE UN PROYECTO EN DJANGO
+	
+	1. Tener virtualenv
+	2. $ pip install Django
+	3. $ django-admin startproject 'Nombre del proyecto'  # Para iniciar un proyecto
+		- Este crea una carpeta que contiene el proyecto.
+		- La estructura de la carpeta es la siguiente:
+			carpeta: Nombre del proyecto
+				carpeta: Nombre del proyecto
+					__init__.py 		# Para identificar la carpeta como un paquete de python.
+					settings.py			# Configuraciones del proyecto.
+					urls.py				# urls del proyecto.
+					wsgi.py				# Archivo que permite desplegar el proyecto.
+				manage.py 		# sirve para poner el proyecto dentro del path de Django. Contiene un listado
+								# utilidades para manejar el proyecto.
+
+	4. Cada proyecto de Django esta dividido por aplicaciones, estas dentro Django estan organizadas de tal manera que 
+		tenemos miniaplicaciones dentro de una gran aplicacion, esto tiene las siguientes ventajas:
+			 - Permite reusar las aplicaciones, con diferentes proyectos.
+			 - Permite dividir la logica en paquetes más pequeños y esto nos ayuda a tener aplicacion mas robustas y 
+			 	flexibles.
+	5. $ python manage.py startapp 'Nombre de la aplicación' 	# Para crear una aplicación
+		- Crea una carpeta nueva con el nombre de la aplicación y tiene la siguiente estructura:
+			carpeta: Nombre de la aplicación
+				carpeta: migrations		# Almacena las migraciones o cambios que se hagan a los modelos a lo largo de 
+										# la historia del projecto. 
+				__init__.py				# Paqete python.
+				admin.py				# Para poder usasr el administrador de contenidos de Django.
+				apps.py					# Contiene la configuracion de esta aplicación.
+				models.py				# Contiene el mapeo entre los datos y la BD.
+				test.py					# Para la pruebas unitarias
+				views.py				# Para las vistas de la aplicación.m
+
+
+CONFIGURACION DEL PROYECTO - settings.py - local_settings.py
+
+	- DEBUG 			# Debe ser False en producción.
+	- MIDDLEWARE 		# Permite activar o desactivar un MIDDLEWARE
+	- ALLOWED_HOSTS		# En producción cuando DEBUG este False aca se deben colocar los Host o ips de Nuestras paginas,
+						# Esto ofrece una protección contra ataques CSRF.
+	- INSTALLED_APP		# Es donde están las aplicaciones instaladas (Registradas).
+	- DATABASES			# Para configurar las BD. Es posible configurar varias BD.
+
+	* Local settings: (Configuraciones para el ambiente de desarrollo.):
+		Al final del archivo de configuraciones importar el archivo de configuraciones locales 'local_settings.py'.
+		Django va a buscar las configuraciones del archivo local_settings.py si no lo encuentra va a usar las del archivo
+		settings.py
+
+
+QUE ES MVC Y MVC APLICADO A DJANGO
+
+	MVC: Es un patron de desarrollo en el que:
+		- Modelo representa la información y logica del negocio.
+		- Vista representa dicha información al usuario.
+		- Controlador en el mediador entres el modelo y la vista.
+
+	Django usa un patron MVC modificado MVT (Modelo Vista Template):
+		- (urls.py + views.py) == Controlador
+		- models.py == Modelo
+		- Controlador renderiza un HTML por medio de los templates de Django == Vista
+
+		Servidor
+		 _________________________________________________________
+		|	 ___________                                          |
+		|	| models.py |<-------¬ Consulta                       |
+		| 	|___________|        |                                |
+		|	 ____________________|_________              ______   |
+		|	|  _________       __|_______  |	       	| HTML |------> Usuario
+	 ---|-> | | urls.py | --> | views.py | | ---------> |______|  |		   |
+	|	|	| |_________|     |__________| | Renderiza            |        |
+	|	|	|______________________________|                      |        v
+	|	|_________________________________________________________|     Request
+	| 																	   |
+	|______________________________________________________________________|
+
+
+FUNCTION BASED VIEW 
+	
+	Vistas: Componente Django que procesa las solicitudes de los usuarios.
+	
+	 * Las vistas basadas en funciones permiten procesar las solicitudes del usuario a traves de funciones. Esta función
+	 recibe un 'request' que luego se procesa y se retorna un 'HttpResponse'.
+
+	 	- Request: Encapsula toda la informació n de la petición al servidor. Si hay parametros GET estos vienen dentro
+		 			del request.
+		- HttpResponse: Es un objeto (incluye a todas las clases que heredan de el) que corresponde a una respuesta http 
+						por parte del servidor.
+
+			Tipos de HttpResponse:
+				- HttpResponse
+				- JsonResponse: Para enviar datos en formato JSON cuando estoy haciendo un AJAX.
+				- HttpResponseRedirect: Cuando se llegue a esta vista va a redireccionar a otro sitio.
+				- HttpResponseBadRequest: Cuando los datos no son validos o la peticion esta mal formada.
+	
+	* Para los templates: Dentro de la aplicacion crear una carpeta templates y dentro de esta otra con el nombre de la
+	aplicación, dentro de esta ultima van los templates de la aplicación, Django va a buscar dentro de la carpeta templates
+	todos los templates por eso es mejor tenerlos separados dentro de estas por aplicaciones.
+
+	** render(request, template, context)
+
+
+CLASS BASED VIEW (views.py)
+
+	Las Class Based Views son formas de procesar las solicitudes de los usuarios haciendo uso de clases.
+	En este caso tendremos un clase que hereda de la clase View y que implementa al menos uno de estos metodos:
+		-get
+		- post
+		- dispatch.
+
+	CRUD Class Based Views:
+		- CreateView: Se genera con un formulario y se crea un nuevo modelo.
+		- UpdateView: Ya trae una instancia de un modelo y simplemente lo actualiza.
+		- ListView: Hace un listado de los objetos de un modelo
+		- DeleteView: Borra un objeto de un modelo.
+
+
+USO DE TEMPLATES O MODELOS EN DJANGO 
+
+
