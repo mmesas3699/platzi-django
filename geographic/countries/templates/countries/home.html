@@ -5,6 +5,12 @@
         <title>HELLO</title>
     </head>
     <body>
-        <h1>Mundo</h1>
-    </body>
+        {% for country in countries%}
+            <p>{{ country.name }}</p>
+            <p>{{ country.code }}</p>
+            {% if country.name == 'Colombia' %}
+                <p>Yeah!!</p>
+            {% endif %}
+        {% endfor%}
+    </body> 
 </html>

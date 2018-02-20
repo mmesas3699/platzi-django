@@ -251,4 +251,15 @@ CLASS BASED VIEW (views.py)
 
 USO DE TEMPLATES O MODELOS EN DJANGO 
 
+	Los templates son la parte de la vista, haciendo relaciòn con el modelo MVC. 
+	Los templates se deben guardar en una carpeta 'templates' dentro de cada aplicacion y dentro de esta 
+	una carpeta con el nombre de la aplicacion a la que pertenece, dentro de esta ultima si deben ir los
+	templates:
 
+		mi_aplicacion/
+			templates/
+				mi_aplicacion/
+					home.html 
+
+	Cuando las vistas heredan de TemplateView usan la función get_context_data(self, *args, **kwargs)
+	para enviar datos a los templates
