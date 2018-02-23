@@ -14,11 +14,6 @@ class HomeView(TemplateView):
     # dispatch()
     template_name = 'countries/home.html'
 
-    def get_context_data(self, *args, **kwargs):
-        colombia = {'name': 'Colombia', 'code': 'CO'}
-        usa = {'name': 'Estados Unidos', 'code': 'USA'}
-        mexico = {'name': 'Mexico', 'code': 'MX'}
 
-        countries = [colombia, usa, mexico]
-        
-        return {'countries': countries}
+class TagsView(TemplateView):
+    template_name = 'countries/tags.html'

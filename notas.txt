@@ -263,3 +263,55 @@ USO DE TEMPLATES O MODELOS EN DJANGO
 
 	Cuando las vistas heredan de TemplateView usan la función get_context_data(self, *args, **kwargs)
 	para enviar datos a los templates
+
+
+Template tag y Template filter, filtros y etiquetas en Django (countries/tags.html)
+
+	* template tag: empiezan con {%
+	* template filter: empiezan con {{ (hacen una transformación sobre un valor que ya existe)
+
+	El tag {% comment %} {% endcomment %} Es como un comentario, es decir lo que se coloque dentro
+	de ese tag no se muestra cuando se renderize el HTML
+
+	{% lorem %}  # Genera un lorem ipsum
+	{% now "Formato" %}  # Genera la fecha actual y se puede pasar un formato 'Y-m-d'
+	{% include %}  # Incluir un template dentro de otro
+	{% extend %}  # Permite la herecia de templates
+
+	{{ "PRUEBAS" | capfirst }}
+	{{ variable | divisibleby:"3" }}  # Retorna True o False, pero no se debe hacer este tipo de logica
+										en los templates, estos ya deberia venir pre procesado por la 
+										vista
+
+
+Context Processor (countries/context_processor.py)
+	Podemos compartir variables en multiples templates. Definimos un diccionario y esos valores a 
+	agregar a todos nuestros templates.
+
+	** Cuando usarlos: Si esos mismos datos se usan en muchas vistas o todas las vistas.
+
+	Estos context processors se encuentran en el archivo de settings.py en TEMPLATES. Algunos
+	context processors definidos por Django son:
+
+        'django.template.context_processors.debug', Util cuando estamos en modo debug porque muestra
+													todas la variables disponibles
+        'django.template.context_processors.request', 
+        'django.contrib.auth.context_processors.auth',
+        'django.contrib.messages.context_processors.messages',
+
+	** Crear un context processor:
+	   1. Crear un archivo context_processor.py dentro de la carpeta que contega mi aplicacion:
+
+	   app/
+	   	  __init__.py
+		  admin.py
+		  apps.py 
+		  models.py 
+		  test.py
+		  views.py
+	   >> context_processor.py 
+
+	   Se crea un metodo en este archivo y luego se registra en settings.py 
+	   Formato:
+	   		aplicacion.modulo.metodo
+
