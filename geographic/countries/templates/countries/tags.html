@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tags examples</title>
-</head>
-<body>
+{% extends "countries/base.html" %}
+
+{% block title %}
+    Tags
+{% endblock %}
+
+{% block content %}
+
     {% comment %}
         Esto es un comentario
     {% endcomment %}
@@ -14,5 +13,11 @@
     <p>Lorem: {% lorem %}</p>
 
     <p>Fecha actual {% now "Y-m-d" %}</p>
-</body>
-</html>
+
+    {% comment %}
+        La variable de abajo 'countries' la trae desde context_processor.py
+        tambien esta disponible en 'home.html'
+    {% endcomment %}
+
+    
+{% endblock %}

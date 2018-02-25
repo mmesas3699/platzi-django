@@ -1,0 +1,11 @@
+{% extends "countries/base.html" %}
+{% block content %}
+    <h1>Detalle de los paises</h1>
+    <p>Código: {{ code }}</p>
+
+    {% for country in countries %}
+        {% if country.code == code %}
+            <p>{{ country.name }}</p>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

@@ -1,16 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>HELLO</title>
-    </head>
-    <body>
-        {% for country in countries%}
-            <p>{{ country.name }}</p>
-            <p>{{ country.code }}</p>
-            {% if country.name == 'Colombia' %}
-                <p>Yeah!!</p>
-            {% endif %}
-        {% endfor%}
-    </body> 
-</html>
+{% extends "countries/base.html"%}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    
+    <p>Desde home.html</p>
+
+    <p>El siguiente código desde country.html:</p>
+
+    {% include "countries/country.html"%}
+
+    <a href="{% url "tags" %}">Tags</a><br>
+    <a href="{% url "continents" %}">Continentes</a><br>
+    <a href="{% url "country_detail_code" code="CO"%}">Link quemado a Colombia</a><br>
+
+    <p>Genera automaticamente los links de los diferentes paises:</p>
+    {% for country in countries %}
+        <a href="{% url "country_detail_code" code=country.code %}">{{country.name}}</a><br>
+    {% endfor %}
+
+    <p>Con el metodo reverse:</p>
+    {% for country in countries %}
+        <a href="{{ country.url }}">{{ country.name }}</a>
+    {% endfor %}
+
+{% endblock %}
+
+

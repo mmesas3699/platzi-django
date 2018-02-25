@@ -313,5 +313,112 @@ Context Processor (countries/context_processor.py)
 
 	   Se crea un metodo en este archivo y luego se registra en settings.py 
 	   Formato:
-	   		aplicacion.modulo.metodo
+	        aplicacion.modulo.metodo
 
+	   Use los datos del metodo context_processor en los templates home.html y tags.html
+
+
+Herencia e inclusión / extend e include  (base.html)
+
+Con los templates de Django hay dos opciones que permiten reducir la cantidad de código que 
+debemos escribir:
+
+	{% include %} -- Para incluir un template dentro de otro. Reusar el código de un template
+	{% extends %} -- Para heredar de un template.
+
+	** Extends:
+		Se crea un template base (base.html) y dentro de este de secciones (bloques) en las cuales
+		va a ir	el código de los otros templates, esto con:
+
+			{% block content %}
+
+			{% endblock %}
+
+		Donde block es el tag de jinja y 'content' es el nombre que le asignamos a ese bloque, cuando 
+		llamemos a este bloque desde otro template ese el nombre que debemos usar.
+
+		Para heredar en home.html de base.html, la primera linea dentro de home debe ser:
+
+			{% extends "ruta_a/base.html" %}
+
+	** Include: (country.html)
+		Si quiero mostrar el código de un template en otro template. Ejemplo:
+			Tomo el código de country.html que me renderiza los paises (los datos los toma del 
+			contexte processor, donde estan disponibles para todos los templates) y lo incluyo en
+			home.html y tags.html, esto con:
+
+				{% include "countries/country.html" %}
+
+		
+Ejercicio (Crear la aplicación continents)
+
+
+Definiendo rutas (https://docs.djangoproject.com/en/2.0/topics/http/urls/)
+	** Para pasar parametros en las URLs se usa <>:
+	   path('url/<parametro>, mi_vista)
+
+	Ejemplo:
+		path('articles/<int:year>/', views.year_archive)
+
+		Donde <int: > puede ser:
+			str: para un string
+			int: para un entero
+			slug: para un slug
+
+		Y < :year> es el nombre del parametro que va a recibir la vista
+
+	** Para una vista que herede de TemplateView, la forma de recibir los datos de los parametros
+	mediante la funcion get_context_data() es atravez de los **kwargs y estos son un diccionario:
+
+		def get_context_data(self, *args, **kwargs):
+		    variable = kwargs['nombre_parametro']
+
+
+Name, Reverse (countries/home.html)
+	
+	** Name: Podemos definir un 'name' único para cada URL y referenciar este nombre en reemplazo 
+	de la URL, de este modo el cambio de una URL no representa un cambio en toda la aplicación.
+
+		path('url/<parametro>, mi_vista, name='nombre_de_la_URL')
+
+	** Reverse: Para referenciar a estos names se puede usar:
+		URL, dentro de los templates:
+
+			<a href="{% url "nombre_de_la_URL" %}">Link</a>
+
+			Si la url recibe parametros:
+
+			<a href="{% url "nombre_de_la_URL" nombre_variable_de_url=valor %}">Link</a>
+
+		Reverse, dentro del código: (context_processor.py, home.html), se usa el metodo reverse():
+			
+			from django.urls import reverse 
+			reverse(viewname, urlconf=None, args=None, kwargs=None, current_app=None)
+
+			colombia = {
+				'name': 'Colombia',
+				'code': 'CO',
+				'url': reverse("country_detail_code", kwargs={'code', 'CO'})
+			}
+		
+			y dentro de los templates se llama al atributo {{ }}
+
+
+Include (geographic.urls) 
+	Permite incluir varias urls a la vez, por lo general en Django cada aplicion debe tener sus propias 
+	urls, para esto en cada carpeta de aplicacion se crea un archivo 'urls.py' y dentro de cada una
+	de estas se crean las urls corresṕondientes para cada App.
+
+	Puede ocurrir que tengamos dos nombre de ulrs iguales en dos aplicaciones diferentes por 
+	ejemplo: continents y countries tienen dos url 'home'
+
+	para separa esto en el archivo urls del proyecto se debe colocar un 'namespace' para difirenciar
+	cada aplicacion
+
+		path('url/', include('app.urls', namespace='name_app'))
+
+	Esto va a colocar por defecto un nombre al metodo reverse(): ver 'countries:country_detail_code':
+
+		'url': reverse("countries:country_detail_code", kwargs={'code', 'CO'})
+
+	Para que funcione debe colocar una variable app_name dentro del urls.py de cada App 

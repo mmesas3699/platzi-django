@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'countries.apps.CountriesConfig'
+    'countries.apps.CountriesConfig',
+    'continents.apps.ContinentsConfig'
 ]
 
 MIDDLEWARE = [
