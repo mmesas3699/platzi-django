@@ -422,3 +422,39 @@ Include (geographic.urls)
 		'url': reverse("countries:country_detail_code", kwargs={'code', 'CO'})
 
 	Para que funcione debe colocar una variable app_name dentro del urls.py de cada App 
+
+
+Creando el primer modelo (countries.models)
+	Los modelos son la capa intermedia entre la aplicación y la base de datos
+	¿Que es?
+		Es una fuente unica de información acerca de los datos. Contiene los campos esenciales 
+		y comportamiento de los datos que se estan guardando, en general cada modelo mapea a una sola
+		tabla de una base de datos.
+
+		** Cada aplicación tiene sus propios modelos (models.py)
+
+	Despues de crear los modelos es necesario hacer una migración para que django cree las tablas en la BD
+	apartir de los modelos creados
+
+		$ python manage.py makemigrations
+			## Crea un archivo que contiene los datos de la migración dentro de la carpeta migrations de 
+			cada aplicación
+
+	Para aplicar la migración:
+
+		$ python manage.py migrate
+	
+	Puedo interactuar con los modelos desde la consola con:
+
+		$ python manage.py shell
+		# He importar los modelos para usarlos
+
+	** API de ORM de Django:
+
+		>> Modelo.objects.all() == SELECT * FROM 
+
+
+****************** 
+Tener mucho cuidado con el app_name dentro de los urls.py
+******************
+

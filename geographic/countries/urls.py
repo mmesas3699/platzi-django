@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeView, TagsView, CountryDetailView
+from countries.views import HomeView, TagsView, CountryDetailView
 
 app_name = 'countries'
 

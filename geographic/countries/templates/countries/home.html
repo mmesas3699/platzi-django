@@ -12,13 +12,12 @@
 
     {% include "countries/country.html"%}
 
-    <a href="{% url "tags" %}">Tags</a><br>
-    <a href="{% url "continents" %}">Continentes</a><br>
-    <a href="{% url "country_detail_code" code="CO"%}">Link quemado a Colombia</a><br>
+    <a href="{% url "countries:tags" %}">Tags</a><br>
+    <a href="{% url "continents:continents" %}">Continentes</a><br>
 
     <p>Genera automaticamente los links de los diferentes paises:</p>
     {% for country in countries %}
-        <a href="{% url "country_detail_code" code=country.code %}">{{country.name}}</a><br>
+        <a href="{{ country.url }}">{{country.name}}</a><br>
     {% endfor %}
 
     <p>Con el metodo reverse:</p>
