@@ -458,3 +458,76 @@ Creando el primer modelo (countries.models)
 Tener mucho cuidado con el app_name dentro de los urls.py
 ******************
 
+API de los modelos en Django
+
+
+Tipos de campos en los modelos de Django
+
+	BooleanField
+		Es un campo que guarda datos de tipo booleano, es decir False o True, es muy útil para
+		establecer banderas de nuestro modelo, por ejemplo para establecer si nuestro modelo está
+		activo o inactivo. Te recomiendo usar siempre el prefijo is o has para definir estos campos
+
+		Ej:
+			is_active = models.BooleanField(default=True)
+
+	ForeignKey
+		Un tipo de campo que establece la relación de uno a muchos hacia otro modelo, requiere
+		tener el campo on_delete para establecer qué hacer cuando el objeto al que esta
+		relacionado se elimina, también requiere el modelo al cual va a estar relacionado.
+		
+		Es uno de los tipos mas usados, algo que te recomiendo que hagas siempre es definir la
+		relacion inversa a travez del campo related_name
+
+		Ej:
+			product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products')
+
+	DateTimeField
+		Representa una fecha con hora. Es muy útil para guardar la fecha de creacion y modificacion
+		de un modelo, usando los parametros:
+			
+			* auto_now_add -> automaticamente agrega la fecha actual al momento que se crea el objeto
+			* auto_now -> automaticamente agrega la fecha actual cada vez que se modifica el objeto
+
+			created_at = models.DateTimeField(auto_now_add=True)
+			updated_at = models.DateTimeField(auto_now=True)
+
+	EmailField
+		Representa un correo, Valida que el texto guardado sea un email valido. Validar emails es mas
+		dificil de lo que parece y django lo hace por ti, y lo hace muy bien.
+
+			email = models.EmailField()
+
+	ImageField
+		Representa una imagen. Cuando se guarda una imagen, sube dicha imagen en nuestro
+		media y almacena la url de dicha imagen
+
+			avatar = models.ImageField()
+
+	SlugField
+		Representa una slug. Valida que el contenido guardado sea un slug valido,
+		por defecto no valida si el slug es unico, asi que se suele usar con el flag unique=True
+
+			slug = models.SlugField(unique=True)
+
+	TextField
+		Representa una texto, a diferencia del charfield, este no tiene limites en
+		cuanto a cuantos caracteres puede guardar.
+
+			content = models.TextField()
+
+	ManyToManyField
+		Representa una relacion de muchos a muchos, al igual que el foreingKey requiere
+		el model al cual estara asociado como primer parametro, pero no requiere definir un on_delete. 
+		Nunca es obligatorio ya que lo que hace este campo es crear un modelo intermedio con los
+		ids de ambos modelos, por ende tambien recuerda que no puedes crear una relacion hasta que ambos
+		campos esten guardados
+
+			products = models.ManyToManyField(Product)
+
+	OneToOneField
+		Representa una relacion de uno a uno. Es equivalente a un foreignkey con un limite de una relacion
+
+			father = models.OneToOneField(Person)
+
+	** referencia completa: https://docs.djangoproject.com/es/2.0/ref/models/fields/
