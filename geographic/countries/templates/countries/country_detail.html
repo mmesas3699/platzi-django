@@ -3,9 +3,6 @@
     <h1>Detalle de los paises</h1>
     <p>Código: {{ code }}</p>
 
-    {% for country in countries %}
-        {% if country.code == code %}
-            <p>{{ country.name }}</p>
-        {% endif %}
-    {% endfor %}
+	{% include 'countries/country.html'%}
+
 {% endblock %}

@@ -586,4 +586,143 @@ Relaciones uno a uno y  mucho a muchos (people.models):
 	person.nacionality.add(country) # Como un updated 
 
 	Uno a uno:
+
+
+Filtrando información del modelo, consultas:
+
+	** El metodo filter() sirve para filtrar información de nuestros modelos.
 	
+		Country.objects.filter(name='Colombia')
+
+		** Para aplicar mas filtros se usa '__' doble guion bajo:
+
+		Country.objects.filter(continent__name__contains='A')	
+
+
+Glosario de filtros:
+
+	* contains / icontains: filtro que se aplica a texto, dice si el argumento que se pasa esta contenido en el campo:
+
+		Country.objects.get(name__contains='co')
+
+		icontains: hace una busqueda ignorando si las letras con mayusculas o minusculas.
+
+		Estos funcionan como un 'like' en sql, se debe tener en cuenta que en campos TextField muy grandes puede ser muy
+		lento.
+
+	* in: Verifica si el valor esta contenido dentro de la lista:
+
+		Entry.objects.filter(id_in=[1, 2, 3])
+
+		Es uno de los filtros más sencillos y poderosos.
+
+	* gt/ gte / lt / lte: Son los filtros correspondientes a 
+
+		- mayor que(gt)
+		- mayor igual que(gte)
+		- menor que(lt)
+		- menor o igual a(lte)
+
+		Person.objects.filter(age__gte=25) # edad mayor o igual a 25
+		Person.objects.filter(age__lte=25) # edad menor o igual a 25
+		Person.objects.filter(age__lt=25) # edad menor a 25
+		Person.objects.filter(age__gt=25) # edad mayor a 25
+
+		Estos filtros funcionan con valores escalares y con fechas.
+
+	* range: Determina si una fecha esta dentro de un rango
+
+		from datetime import datetime, timedelta
+		from_date = datetime.now() - timedelta(days=20)
+		to_date = datetime.now() - timedelta(days=10)
+		User.objects.filter(date_joined__range=(from_date, to_date))
+
+	* isnull: Determina si el campo es nulo
+
+		Entry.objects.filter(pub_date__isnull=True)
+
+	* year/month/day/week: Para las fechas, podemos preguntar por un dato en especifico, por año, mes, dia, semana
+
+		User.objects.filter(date_joined__year=2018) # Filtra por el año 2018
+		User.objects.filter(date_joined__month=12) # Filtra por el mes 12
+		User.objects.filter(date_joined__day=1) # Filtra por el dia 1
+		User.objects.filter(date_joined__week=1) # Filtra por la semana 1
+
+		** Se puede concatenar los filtros comparadores, es decir:
+
+			date_joined__year__gte=2018
+
+
+Obteniendo información (countries.views.CountryDetailView)
+	
+	Metodo GET: Nos permite buscar un solo registro de nuestros modelos. Funciona parecido a filter en el sentido de que
+	podemos usar varios campos o un solo campo para buscar información, excepto que GET nos trae un solo registro. 
+	Si no lo hace, mostrara DoesNotExist
+
+	** El shorcut get_object_or_404 sirve para acortar el try/except:
+
+		try:
+            country = Country.objects.get(code=kwargs['code'])
+        except Country.DoesNotExist as e:
+            raise Http404()
+
+        return {'country': country}
+
+        -------------------------------------
+
+      	from django.shortcuts import get_object_or_404
+
+      	country = get_object_or_404(Country, code=kwargs['code']) # 1er parametro: Modelo. 2do parametro: El campo
+
+
+Ordering and limit 
+
+	** Order by: 
+
+		Model.objects.order_by('campo') ##ASC
+
+		Model.objects.order_by('-campo') ## DESC incluyendo el menos
+
+		Model.objects.order_by('?')  ## Orden aleartorio, cada vez que se ejecute va a sacar un orden diferente
+
+	** Limit: 
+
+		Model.objects.all()[:1]  ## Limit 1
+
+	******
+		Para ver el sql que crea el ORM incluir al final '.query':
+
+		Model.objects.all().query
+
+		print(Model.objects.all().query)
+	******
+
+
+Update, Delete
+	
+	** Update:  Country.objects.filter(code__in=['CO','MX']).update(continent=america)
+	** Delete: Country.objects.filter(code__in=['CO','MX']).delete()
+
+
+Creación de un Custom Manager, o Administrador Personalizado (countries.models.Country)
+	
+	El .objects de las consultas Model.objects, es un Manager, basicamente una interfaz entre nuestro modelo y la BD.
+	Este tiene un comportamiento predefinido, pero si lo deseamos podemos modificar ese comportamiento a nuestra
+	conveniencia.
+
+		** Segun el ejemplo: Si tengo un modelo Usuario y este tiene un campo 'is_active' para activar (True) o 
+		desactivar (False) el mismo, puedo crear un Manager para que cuando haga querys sobre el modelo los usuarios
+		inactivos no aparezcan.
+
+	Creacion de un Manager para que cuando se use solo traiga los Countries activos. Para que funcione hay que colocar en
+    los modelos que van a usar este Manager la variable:
+
+        active_manager = ActiveManager
+
+    Cuando se hace esto inmediatamente va a desaparecer el Manager 'objescts' si se desea conservar se debe añadir al modelo:
+
+    	objects = models.Manager()
+
+
+ Reto: Aplica los conocimientos adquiridos en la aplicacion Continentes
+ 

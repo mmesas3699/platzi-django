@@ -1,9 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse,Http404
 from django.views.generic import View
-from django.views.generic import TemplateView #  Importa la clase View
+from django.views.generic import TemplateView  # Importa la clase View
+from django.views.generic.list import ListView
 
+from countries.models import Country
 # Create your views here.
+
 
 class HomeView(TemplateView):
     # Estas clases solo aceptan los metodos GET, POST o DISPATCH
@@ -23,6 +26,14 @@ class CountryDetailView(TemplateView):
     template_name = 'countries/country_detail.html'
 
     def get_context_data(self, *args, **kwargs):
-        code = kwargs['code']
-        
-        return {'code': code}
+        country = get_object_or_404(Country, code=kwargs['code'])
+
+        return {'country': country}
+
+
+class CountrySearchView(ListView):
+    template_name = 'countries/search.html'
+
+    def get_queryset(self):
+        query = self.kwargs['query']
+        return Country.objects.filter(name__contains=query)
