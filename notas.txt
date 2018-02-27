@@ -531,3 +531,59 @@ Tipos de campos en los modelos de Django
 			father = models.OneToOneField(Person)
 
 	** referencia completa: https://docs.djangoproject.com/es/2.0/ref/models/fields/
+
+
+Tipos de relaciones entre modelos de django
+
+	1. Relación uno a muchos: Donde un modelo se relaciona con muchos modelos
+ 
+                    ___________ modelo 2
+				   |			
+				   |  _________ modelo 3	   /			
+                   | |
+                   | |								
+		modelo 1 -------------- modelo 4
+				   | |
+				   | |_________ modelo 5
+				   |
+				   |___________ modelo 6
+
+	2. Relaciones uno a uno (countries.models): Relación que se establece donde un elemento dentro de un modelo corresponde 
+		exactamente a un elemento dentro de otro modelo.
+
+		Para crear una relacion uno a uno se usa: models.ForeignKey(to,on_delete) que recibe como parametro el modelo
+		al cual se va a relacionar, como segundo parametro recibe 'on_delete' que es el comportamiento que 
+		debe tener en caso que se elimine el elemento al cual hace referencia.
+			Ejemplo: Si se borra un continente con la opcion 'CASCADE' se borrar automaticamente todos los
+			countrie que tengas asociado dicho continente.
+
+	3. Relaciones muchos a muchos: Donde muchos modelos se relacionan a su vez con muchos modelos.
+
+
+Relaciones uno a uno y  mucho a muchos (people.models):	
+	
+	Muchos a muchos:
+
+	Las relaciones muchos a mucho crean una tabla intermedia que almacena las relaciones:
+
+		Ejemplo: Tengo la tabla Person y Country, en esta relacion se crea una tabla intermedia que almacena
+		la relacion de estas.
+
+		Person				  					 Country
+		person_id  ---------  person_id -------- country_id
+							  country_id
+
+	** En este tipo de relacion el campo que se crea como ManyToManyField no es obligatorio y como esta
+	opcion lo que hace es crear una table intermedia no es posible crear un objeto de Person con un Country
+	inicialmente, primero se debe crear Person (name=name y nacionality=null) despues hay que asignarle el 
+	Country.
+
+	from people.models import Person
+	from countries.models import Country
+
+	country = Country.objects.last() # Trae el ultimo registro creados
+	person = Person.objects.create(first_name='Miguel')
+	person.nacionality.add(country) # Como un updated 
+
+	Uno a uno:
+	

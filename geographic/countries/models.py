@@ -12,6 +12,7 @@ class Country(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=3, choices=CODES_CHOICES)
     # code = models.CharField(max_length=3)
+    continent = models.ForeignKey('continents.Continent', on_delete=models.CASCADE)
 
     # Si quiero que el campo code tome solo ciertos datos dados (que usuario no inserte lo que quiera, si no 
     # lo que se le da a escoger):

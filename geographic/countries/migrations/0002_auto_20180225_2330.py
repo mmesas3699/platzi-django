@@ -2,6 +2,15 @@
 
 from django.db import migrations, models
 
+def create_continent(apps, schema_editor):
+    Continent = apps.get_model('continents', 'Continent')
+
+    Continent.objects.create(name='Asia', color='red', translate='Asia')
+    Continent.objects.create(name='Europa', color='blue', translate='Europa')
+    Continent.objects.create(name='America', color='yellow', translate='America')
+    Continent.objects.create(name='Africa', color='black', translate='Africa')
+    Continent.objects.create(name='Oceania', color='grey', translate='Oceania')
+
 
 class Migration(migrations.Migration):
 
@@ -10,6 +19,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(create_continent),
         migrations.AlterField(
             model_name='country',
             name='code',
