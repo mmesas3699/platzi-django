@@ -725,4 +725,82 @@ Creación de un Custom Manager, o Administrador Personalizado (countries.models.
 
 
  Reto: Aplica los conocimientos adquiridos en la aplicacion Continentes
- 
+
+
+Formularios en Django (people/forms.py)
+
+	Permite valida información y procesar formularios web 
+
+	Los formularios deben ser creados como clases.
+
+	La función render(), recibe como primer parametro el objeto reques **siempre, luego el template a 
+	renderizar y por ultimo se puede, en fomra de diccionario la info que se vaya a enviar al template.
+
+	render(request, 'people/register.html', {'form': form})
+
+
+Validación de datos en los formularios (people/views.py)
+	is_valid(): Este metodo retorna true cuando el formulario es valido. Es valido cuando los campos 
+	corresponden a los atributos que hemos definido en el formulario.
+
+
+Tipo de datos - en formularios
+
+	Para los campos ManyToManyField se utiliza el forms.ModelMultipleChoiceField( queryset ), que recibe como 
+	parametro un queryset , lo va ha ejecutar y de acuerdo a esta consuta genera las opciones.
+
+
+Creación de objetos apartir de información valida en formularios (people/views.py)
+	
+
+Uso de Model form para la creación de objetos automatizada:
+	
+	Ver la clase django.forms.ModelForm
+	automatiza todos los pasos de la clase anterior.
+
+	Diferencia en Form y ModelForm: El ModelForm determina si un campo es obligatorio o no por el atributo 
+	'blank' del Modelo mas no por el 'null' ver: people.models.Person.
+
+		Osea si se usa el ModelForm en los modelos de bebe incluir blank=True para los campos no obligatorios
+
+
+Contexto de un formulario:
+
+	**Repetir el video
+
+
+Middleware, ¿Que son? y ¿Como funcionan? (people/middleware.py)
+	Es una capa intermedia entre nuestro request y nuestro response. Con uno podemos afectar ambas.
+	Django viene con varios de ellos habilitados por defecto.
+
+
+	|			  WEB SERVER           |
+	------------------------------------
+	  HttpRequest                   ^
+		  |							|	
+		  |							|
+		  |	SecurityMiddleware		|
+		  | SessionMiddleware		|
+		  | CommonMiddleware 		|	
+		  |							|
+		  |		  					|
+		  |							|
+          v				    	HttpResponse
+	-------------------------------------
+	|		 	VIEW PROCESSING			|
+
+
+	Para agregar un middleware hay que registralo en los settings.	
+
+	Esto puede servir para ver los permisos de las vistas, Que el administrador solo pueda ver las vistas que
+	le corresponden y asi con cada uno de los usuarios.
+
+
+Creando un middleware para test A/B: (people.middleware.ABMiddleware)
+	
+	** request.session == Variable que guarda la session activa
+
+
+Reto 3
+
+
