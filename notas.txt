@@ -13,7 +13,7 @@ Check Mysql services:
 	$ sudo service mysql start
 
 
-******* Comandos Django **********
+******* Comandos Django ********** 
 # Iniciar un proyecto 
 $ django-admin.py startproject mysite
 
@@ -803,4 +803,176 @@ Creando un middleware para test A/B: (people.middleware.ABMiddleware)
 
 Reto 3
 
+
+Creación de platzicomerce: (https://github.com/DavidToca/platzicomerce)
+
+	** Siempre usamos plural para las aplicaciones y singular para los modelos, esto es una regla 
+		que debemos mantener para mantener la consistencia de nuestro proyectos.
+
+	
+	** models.DateTimeField(auto_now_add=True) ## Sirve para agregar la fecha de creacion de item automaticamente
+
+	** models.DateTimeField(auto_now=True) ## Sirve para guardar la fecha de modificación del item.
+
+	***
+	Cuando se crea un modelo para almacenar imagenes lo que se guarda en la base de datos es la url de la dirección donde 
+	esta almacenada la imagen, Django no provee un servidor de contenido multimedia.
+
+	Hay que buscar un servicio de un tercero.
+
+	Django almacena las imagenes en la carpeta 'MEDIA/'
+
+	-- Solo en ambiente de desarrollo --
+	Usar Pillow:
+		$ pip install pillow 
+
+	***
+
+	models.TextField() = Es como un CharField pero sin limites.
+
+
+Creando el frontend de Platzicomerce:
+
+	Para manejar archivos staticos se crea una carpeta static/ dentro de cada app y dentro de los
+	correspondientes css, js, img
+
+	y para los templates, igual dentro de cada app se crean el directorio templates/nombreapp/ y dentro de
+	esta van los .html
+
+	
+Páginas de login y logout
+
+	Esta opción esta disponible desde Django en el auth
+
+		from django.contrib.auth.views import login ,logout
+
+
+
+Home con productos
+	
+	--- CREAR LA CONFIGURACION PARA SERVIR IMAGENES SOLO EN DESARROLLO ---
+
+	1. En settings.py: crear el setting:
+
+			MEDIA_URL = '/media/'  ## Que es el directorio donde se van a guardar las imagenes.
+
+	2. En las urls de la aplicación que va a servir las imagenes:
+
+		añadir al urlpatterns:
+
+			from django.conf.urls.static import static
+			from django.conf import settings
+
+			urlpatterns = [
+				path()
+			] + static(setting.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True) 
+
+
+
+Vista de detalle del producto ingresando desde home
+	
+	Para hacer links de los Modelos (como comentarios o facturas):
+
+	A los modelos (get_absolute_url()): 
+
+		class Product(models.Model):
+    		created_at = models.DateTimeField(auto_now_add=True)
+		    updated_at = models.DateTimeField(auto_now=True)
+		    title = models.CharField(max_length=255)
+		    descripcion = models.CharField(max_length=255)
+		    price = models.IntegerField()
+		    slug = models.SlugField()
+		    categories = models.ManyToManyField('products.ProduCategory')
+
+		    def get_absolute_url(self):
+		        return reverse("detail", kwargs={'slug': self.slug})
+
+		    def __str__(self):
+		        return self.title
+
+
+	Para ver si el usuario esta logeado: en base.html
+
+	 {% if request.user.is_authenticated%}
+            <li class="nav-item">
+              {{request.user.username}}/<a class="nav-link" href="{% url "accounts:logout" %}">logout</a>
+            </li>
+     {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "accounts:login" %}">Login</a>
+            </li>
+     {% endif %}
+
+
+Creación de la vista de comentarios:
+
+
+
+Creación de la cuenta y llaves de Stripe:
+
+Creacion de cuenta
+Ve a la url https://dashboard.stripe.com/register, llenamos los datos correspondientes
+
+# stripe1.png
+
+Luego nos pedira un numero celular para el caso en que perdamos nuestro acceso, este paso es opcional, si quieres
+puedes configurarlo, o puedes omitirlo haciendo click en ‘Skip’
+
+# stripe2.png
+
+Al configurar el telefono o hacer click en skip, estaremos en el dashboard de nuestro stripe
+
+# stripe3.png
+
+Ahora que tenemos nuestra cuenta en stripe, vamos a obtener las llaves de stripe necesarias para hacer cobros,
+para ello vamos a ir a la sección de api en el menú izquierdo de la pantalla, y hacemos click en el menu api:
+
+# stripe4.png
+
+Obtener las llaves
+Ahora extraemos nuestra secret key haciendo click al botón “reveal test key token”, tendrá la forma de
+
+“sk_test_<identificador>”
+
+necesitaremos esos 2 tokens, publishable key como la llave que usaremos públicamente en el formulario de checkout,
+y secret key, la llave que usaremos en privado para realizar los cobros.
+
+Pongamos estos dos datos al final de nuestro archivo settings.py:
+
+STRIPE_API_KEY = <tu secret key va aqui>
+STRIPE_PUBLIC_API_KEY = <tu published key va aqui>
+
+
+Comprar producto: (products.views.ProductBuyView y buy.html)
+
+	$ pip install stripe
+
+	En product/buy.html: se importa : <script src="https://js.stripe.com/v3/"></script>
+
+	import stripe
+
+	** Stripe realiza el proceso de cobro pero no nos envia los datos de la tarjeta eso los guardan ellos, lo que ellos nos envian
+	es un token de confimación.
+
+
+Solución al reto: manejo de errores como respuesta de stripe
+
+
+Cierre del curso y buenas prácticas de Permisos y Seguridad
+
+	https://www.ponycheckup.com/ # Hace test de fuerza bruta a mi pagina web
+
+	django honnypot # para cambiar la url admin/ y que sea un sitio falso
+
+
+
+*** llevar django a producción
+ https://platzi.com/blog/llevar-django-a-produccion/
+
+
+Testing en Django (platzicomerce.products.test)
+
+	$ python manage.py test
+
+	En cada aplicación hay un archivo test.py
 
